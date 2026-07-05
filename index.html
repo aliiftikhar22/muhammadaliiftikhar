@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muhammad Ali Iftikhar — Data Analyst</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0F1420;
+    --panel: #161D2C;
+    --panel-alt: #1C2436;
+    --border: #29314A;
+    --text: #EAEDF3;
+    --muted: #8B93A7;
+    --amber: #F5A623;
+    --teal: #35D0A8;
+    --radius: 14px;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3,.display{
+    font-family:'Space Grotesk', sans-serif;
+    letter-spacing:-0.01em;
+  }
+
+  .mono{
+    font-family:'IBM Plex Mono', monospace;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+
+  .wrap{
+    max-width:1120px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ---------- background grid texture ---------- */
+  .grid-bg{
+    position:fixed;
+    inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size:44px 44px;
+    pointer-events:none;
+    z-index:0;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+  }
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(15,20,32,0.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  nav .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:68px;
+  }
+  .brand{
+    font-weight:700;
+    font-size:16px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .brand .dot{
+    width:9px; height:9px;
+    border-radius:2px;
+    background:var(--amber);
+    display:inline-block;
+    transform:rotate(45deg);
+  }
+  .navlinks{
+    display:flex;
+    gap:32px;
+    font-size:14px;
+    color:var(--muted);
+  }
+  .navlinks a{ transition:color .2s ease; }
+  .navlinks a:hover{ color:var(--text); }
+  .nav-cta{
+    font-size:13px;
+    padding:9px 18px;
+    border:1px solid var(--border);
+    border-radius:999px;
+    color:var(--text);
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .nav-cta:hover{ border-color:var(--amber); background:rgba(245,166,35,0.08); }
+  .navlinks, .nav-cta{ z-index:2; }
+  @media (max-width:760px){ .navlinks{ display:none; } }
+
+  /* ---------- hero ---------- */
+  header.hero{
+    position:relative;
+    padding:96px 0 88px;
+    z-index:1;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:56px;
+    align-items:center;
+  }
+  @media (max-width:900px){ .hero-grid{ grid-template-columns:1fr; } }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:0.06em;
+    color:var(--teal);
+    text-transform:uppercase;
+    margin-bottom:20px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:7px; height:7px;
+    border-radius:50%;
+    background:var(--teal);
+    box-shadow:0 0 0 4px rgba(53,208,168,0.15);
+  }
+
+  h1.name{
+    font-size:clamp(34px, 4.6vw, 52px);
+    font-weight:700;
+    line-height:1.08;
+    margin-bottom:18px;
+  }
+  h1.name span{ color:var(--amber); }
+
+  .role-line{
+    font-size:17px;
+    color:var(--muted);
+    max-width:520px;
+    margin-bottom:32px;
+  }
+  .role-line b{ color:var(--text); font-weight:600; }
+
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    padding:13px 24px;
+    border-radius:10px;
+    font-size:14px;
+    font-weight:600;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .btn-primary{
+    background:var(--amber);
+    color:#191308;
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 10px 24px rgba(245,166,35,0.25); }
+  .btn-ghost{
+    border:1px solid var(--border);
+    color:var(--text);
+  }
+  .btn-ghost:hover{ border-color:var(--teal); background:rgba(53,208,168,0.06); }
+
+  /* ---- signature: mini live dashboard mockup ---- */
+  .dash-card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:22px;
+    box-shadow:0 24px 60px -20px rgba(0,0,0,0.55);
+    position:relative;
+  }
+  .dash-topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+  }
+  .dash-title{ font-size:12.5px; color:var(--muted); font-family:'IBM Plex Mono', monospace; }
+  .dash-dots{ display:flex; gap:6px; }
+  .dash-dots span{ width:7px; height:7px; border-radius:50%; background:var(--border); }
+
+  .kpi-row{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:10px;
+    margin-bottom:20px;
+  }
+  .kpi{
+    background:var(--panel-alt);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px 12px 10px;
+  }
+  .kpi .num{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:20px;
+    font-weight:700;
+    color:var(--teal);
+  }
+  .kpi .lbl{
+    font-size:10.5px;
+    color:var(--muted);
+    margin-top:2px;
+    font-family:'IBM Plex Mono', monospace;
+  }
+
+  .chart-area{
+    display:flex;
+    align-items:flex-end;
+    gap:8px;
+    height:120px;
+    padding:12px 10px 0;
+    background:var(--panel-alt);
+    border:1px solid var(--border);
+    border-radius:10px;
+  }
+  .bar{
+    flex:1;
+    background:linear-gradient(180deg, var(--amber), rgba(245,166,35,0.25));
+    border-radius:4px 4px 0 0;
+    height:0%;
+    transition:height 1.1s cubic-bezier(.2,.8,.2,1);
+  }
+  .bar:nth-child(3n+2){ background:linear-gradient(180deg, var(--teal), rgba(53,208,168,0.25)); }
+
+  .dash-foot{
+    display:flex;
+    justify-content:space-between;
+    margin-top:14px;
+    font-size:10.5px;
+    color:var(--muted);
+    font-family:'IBM Plex Mono', monospace;
+  }
+
+  /* ---------- section shell ---------- */
+  section{ position:relative; z-index:1; padding:88px 0; border-top:1px solid var(--border); }
+  .section-head{ margin-bottom:44px; }
+  .section-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--amber);
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    margin-bottom:10px;
+  }
+  .section-title{ font-size:clamp(24px, 3vw, 32px); font-weight:700; }
+
+  /* ---------- about ---------- */
+  .about-grid{
+    display:grid;
+    grid-template-columns:220px 1fr;
+    gap:48px;
+    align-items:center;
+  }
+  @media (max-width:700px){ .about-grid{ grid-template-columns:1fr; } }
+  .photo-frame{
+    width:200px; height:200px;
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid var(--border);
+    background:var(--panel);
+    position:relative;
+  }
+  .photo-frame img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .photo-frame::after{
+    content:'';
+    position:absolute; inset:0;
+    border-radius:20px;
+    box-shadow:inset 0 0 0 1px rgba(245,166,35,0.15);
+  }
+  .about-text p{ color:var(--muted); margin-bottom:14px; font-size:15.5px; max-width:620px; }
+  .about-text p b{ color:var(--text); }
+
+  /* ---------- skills / kpi tiles ---------- */
+  .skills-grid{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:14px;
+  }
+  @media (max-width:900px){ .skills-grid{ grid-template-columns:repeat(2, 1fr); } }
+  .skill-tile{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:20px 16px;
+    transition:transform .2s ease, border-color .2s ease;
+  }
+  .skill-tile:hover{ transform:translateY(-4px); border-color:var(--amber); }
+  .skill-tile .sk-name{ font-weight:600; font-size:14.5px; margin-bottom:10px; }
+  .sk-bar-track{
+    height:6px;
+    background:var(--panel-alt);
+    border-radius:99px;
+    overflow:hidden;
+    margin-bottom:8px;
+  }
+  .sk-bar-fill{
+    height:100%;
+    border-radius:99px;
+    background:linear-gradient(90deg, var(--teal), var(--amber));
+    width:0%;
+    transition:width 1s ease;
+  }
+  .sk-level{ font-size:11px; color:var(--muted); font-family:'IBM Plex Mono', monospace; }
+
+  /* ---------- projects ---------- */
+  .proj-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:20px;
+  }
+  @media (max-width:900px){ .proj-grid{ grid-template-columns:1fr; } }
+  .proj-card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    overflow:hidden;
+    transition:transform .2s ease, border-color .2s ease;
+  }
+  .proj-card:hover{ transform:translateY(-4px); border-color:var(--teal); }
+  .proj-thumb{
+    height:120px;
+    background:var(--panel-alt);
+    display:flex;
+    align-items:flex-end;
+    gap:6px;
+    padding:16px;
+  }
+  .proj-thumb .pb{
+    flex:1;
+    border-radius:3px 3px 0 0;
+    background:linear-gradient(180deg, var(--amber), transparent);
+  }
+  .proj-thumb.alt .pb{ background:linear-gradient(180deg, var(--teal), transparent); }
+  .proj-body{ padding:18px 18px 22px; }
+  .proj-body h3{ font-size:16.5px; margin-bottom:8px; }
+  .proj-body p{ font-size:13.5px; color:var(--muted); margin-bottom:12px; }
+  .tag-row{ display:flex; gap:6px; flex-wrap:wrap; }
+  .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    padding:4px 9px;
+    border-radius:99px;
+    background:var(--panel-alt);
+    border:1px solid var(--border);
+    color:var(--muted);
+  }
+
+  /* ---------- certificates ---------- */
+  .cert-list{ display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; }
+  @media (max-width:900px){ .cert-list{ grid-template-columns:1fr; } }
+  .cert-card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:20px;
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+  }
+  .cert-icon{
+    width:36px; height:36px;
+    border-radius:9px;
+    background:rgba(245,166,35,0.12);
+    color:var(--amber);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    flex-shrink:0;
+  }
+  .cert-card h3{ font-size:14.5px; margin-bottom:4px; }
+  .cert-card p{ font-size:12.5px; color:var(--muted); }
+
+  /* ---------- education ---------- */
+  .edu-card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:26px 28px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:14px;
+  }
+  .edu-card h3{ font-size:17px; margin-bottom:6px; }
+  .edu-card p{ color:var(--muted); font-size:14px; }
+  .status-pill{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    padding:6px 14px;
+    border-radius:99px;
+    background:rgba(53,208,168,0.12);
+    color:var(--teal);
+    border:1px solid rgba(53,208,168,0.3);
+  }
+
+  /* ---------- contact / footer ---------- */
+  footer{
+    padding:80px 0 50px;
+    text-align:center;
+    position:relative; z-index:1;
+    border-top:1px solid var(--border);
+  }
+  footer h2{ font-size:clamp(24px,3.4vw,34px); margin-bottom:16px; }
+  footer p{ color:var(--muted); margin-bottom:32px; }
+  .contact-row{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-bottom:56px; }
+  .foot-bottom{ font-size:12.5px; color:var(--muted); font-family:'IBM Plex Mono', monospace; }
+
+  ::selection{ background:var(--amber); color:#191308; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; scroll-behavior:auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span> M. ALI IFTIKHAR</div>
+    <div class="navlinks">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#certs">Certificates</a>
+      <a href="#education">Education</a>
+    </div>
+    <a class="nav-cta" href="#contact">Get in touch</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Available for data analyst roles</div>
+      <h1 class="name">Muhammad Ali Iftikhar —<br><span>turning raw data into decisions.</span></h1>
+      <p class="role-line">Data Analyst at <b>Datafynix</b>, building <b>Power BI</b> and <b>Looker Studio</b> dashboards, automating workflows with <b>Power Automate</b> and <b>n8n</b>, and managing data end-to-end with <b>SQL</b> and <b>SSMS</b>.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#projects">View my work</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/muhammadaliiftikhar/" target="_blank" rel="noopener">Connect on LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="dash-card">
+      <div class="dash-topbar">
+        <span class="dash-title">report — monthly_performance.pbix</span>
+        <div class="dash-dots"><span></span><span></span><span></span></div>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi"><div class="num" id="kpi1">0</div><div class="lbl">DASHBOARDS</div></div>
+        <div class="kpi"><div class="num" id="kpi2">0</div><div class="lbl">AUTOMATIONS</div></div>
+        <div class="kpi"><div class="num" id="kpi3">0</div><div class="lbl">CORE TOOLS</div></div>
+      </div>
+      <div class="chart-area" id="chartArea"></div>
+      <div class="dash-foot">
+        <span>source: SSMS · SQL</span>
+        <span>refreshed just now</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap about-grid">
+    <div class="photo-frame">
+      <img src="profile.png" alt="Muhammad Ali Iftikhar">
+    </div>
+    <div class="about-text">
+      <div class="section-tag">About</div>
+      <h2 class="section-title" style="margin-bottom:16px;">Data Analyst, dashboard builder, automation enthusiast</h2>
+      <p>I'm a Data Analyst at <b>Datafynix</b>, currently completing my <b>BSCS</b> at <b>UCP</b>. My focus is turning messy, scattered data into dashboards people actually use — clean visuals in <b>Power BI</b> and <b>Looker Studio</b>, backed by solid <b>SQL</b> and database work in <b>SSMS</b>.</p>
+      <p>Alongside analysis, I build automations with <b>Power Automate</b> and <b>n8n</b> to cut out repetitive manual work — so teams spend less time collecting data and more time acting on it.</p>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Skills</div>
+      <h2 class="section-title">What I work with day to day</h2>
+    </div>
+    <div class="skills-grid" id="skillsGrid">
+      <div class="skill-tile" data-level="92">
+        <div class="sk-name">Power BI</div>
+        <div class="sk-bar-track"><div class="sk-bar-fill"></div></div>
+        <div class="sk-level">Dashboards & DAX</div>
+      </div>
+      <div class="skill-tile" data-level="85">
+        <div class="sk-name">Looker Studio</div>
+        <div class="sk-bar-track"><div class="sk-bar-fill"></div></div>
+        <div class="sk-level">Reporting</div>
+      </div>
+      <div class="skill-tile" data-level="80">
+        <div class="sk-name">SQL</div>
+        <div class="sk-bar-track"><div class="sk-bar-fill"></div></div>
+        <div class="sk-level">Querying & joins</div>
+      </div>
+      <div class="skill-tile" data-level="78">
+        <div class="sk-name">SSMS</div>
+        <div class="sk-bar-track"><div class="sk-bar-fill"></div></div>
+        <div class="sk-level">Database design</div>
+      </div>
+      <div class="skill-tile" data-level="82">
+        <div class="sk-name">Power Automate</div>
+        <div class="sk-bar-track"><div class="sk-bar-fill"></div></div>
+        <div class="sk-level">Workflow automation</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Projects</div>
+      <h2 class="section-title">Selected work</h2>
+    </div>
+    <div class="proj-grid">
+      <div class="proj-card">
+        <div class="proj-thumb">
+          <div class="pb" style="height:40%"></div><div class="pb" style="height:70%"></div><div class="pb" style="height:50%"></div><div class="pb" style="height:85%"></div><div class="pb" style="height:60%"></div>
+        </div>
+        <div class="proj-body">
+          <h3>Interactive BI Dashboards</h3>
+          <p>Built performance and reporting dashboards in Power BI and Looker Studio, turning raw datasets into clear, interactive visuals for faster decision-making.</p>
+          <div class="tag-row"><span class="tag">Power BI</span><span class="tag">Looker Studio</span><span class="tag">DAX</span></div>
+        </div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-thumb alt">
+          <div class="pb" style="height:55%"></div><div class="pb" style="height:30%"></div><div class="pb" style="height:75%"></div><div class="pb" style="height:45%"></div><div class="pb" style="height:65%"></div>
+        </div>
+        <div class="proj-body">
+          <h3>Workflow Automations</h3>
+          <p>Designed automated workflows with Power Automate and n8n to remove repetitive manual data tasks and keep reports updating without intervention.</p>
+          <div class="tag-row"><span class="tag">Power Automate</span><span class="tag">n8n</span></div>
+        </div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-thumb">
+          <div class="pb" style="height:65%"></div><div class="pb" style="height:45%"></div><div class="pb" style="height:80%"></div><div class="pb" style="height:35%"></div><div class="pb" style="height:55%"></div>
+        </div>
+        <div class="proj-body">
+          <h3>Database Design in SSMS</h3>
+          <p>Structured and managed relational databases in SQL Server Management Studio, laying the groundwork for reliable, query-ready reporting.</p>
+          <div class="tag-row"><span class="tag">SQL Server</span><span class="tag">SSMS</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="certs">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Certificates</div>
+      <h2 class="section-title">Continuous learning</h2>
+    </div>
+    <div class="cert-list">
+      <div class="cert-card">
+        <div class="cert-icon">n8n</div>
+        <div>
+          <h3>n8n Level 1 &amp; 2</h3>
+          <p>Certified in workflow automation fundamentals and advanced flows.</p>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">GS</div>
+        <div>
+          <h3>Getting Started with Looker Studio</h3>
+          <p>Core reporting and data visualization techniques in Looker Studio.</p>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">SQL</div>
+        <div>
+          <h3>The Complete Oracle SQL Bootcamp (2025)</h3>
+          <p>End-to-end SQL querying, joins, and database fundamentals.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-tag">Education</div>
+      <h2 class="section-title">Academic background</h2>
+    </div>
+    <div class="edu-card">
+      <div>
+        <h3>BS Computer Science</h3>
+        <p>University of Central Punjab (UCP)</p>
+      </div>
+      <span class="status-pill">In Progress</span>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <h2>Let's work together</h2>
+    <p>Open to data analyst roles, dashboard projects, and automation work.</p>
+    <div class="contact-row">
+      <a class="btn btn-primary" href="https://www.linkedin.com/in/muhammadaliiftikhar/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn btn-ghost" href="mailto:your-email@example.com">Email me</a>
+    </div>
+    <div class="foot-bottom">© 2026 Muhammad Ali Iftikhar. Built for data-driven work.</div>
+  </div>
+</footer>
+
+<script>
+  // Animate hero KPI numbers
+  function countUp(el, target, duration){
+    let start = 0;
+    const step = Math.max(1, Math.floor(duration / target));
+    const interval = setInterval(()=>{
+      start++;
+      el.textContent = start;
+      if(start >= target){ clearInterval(interval); }
+    }, step);
+  }
+
+  window.addEventListener('load', ()=>{
+    countUp(document.getElementById('kpi1'), 6, 600);
+    countUp(document.getElementById('kpi2'), 4, 500);
+    countUp(document.getElementById('kpi3'), 5, 500);
+
+    // build hero bar chart
+    const chart = document.getElementById('chartArea');
+    const heights = [40, 65, 50, 80, 60, 90, 70];
+    heights.forEach(h=>{
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      chart.appendChild(bar);
+      requestAnimationFrame(()=>{ setTimeout(()=>{ bar.style.height = h + '%'; }, 100); });
+    });
+
+    // animate skill bars on scroll into view
+    const tiles = document.querySelectorAll('.skill-tile');
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          const fill = entry.target.querySelector('.sk-bar-fill');
+          fill.style.width = entry.target.dataset.level + '%';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.3 });
+    tiles.forEach(t=>observer.observe(t));
+  });
+</script>
+
+</body>
+</html>
